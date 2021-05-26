@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 echo "================ 1. 安装配置docker & docker-compose基础环境 ================"
 
 echo "卸载旧的docker"
