@@ -72,7 +72,7 @@ do
         fi
 	
 	cd $folder
-	cp ../resource/docker-compose.yml ./
+	cp ../../resource/docker-compose.yml ./
 	
     echo "当前正在创建节点clef名称: $folder"
 	sed -i "" "s/clef-1/clef-$i/g" docker-compose.yml
@@ -86,7 +86,7 @@ do
 	sed -i "" "s/P2P_ADDR:-1634/P2P_ADDR:-$port2/"	docker-compose.yml
 	sed -i "" "s/0.0.0.0:1635/0.0.0.0:$port3/"	docker-compose.yml
 	
-	cp ../resource/.env ./
+	cp ../../resource/.env ./
 
 	docker-compose -f docker-compose.yml --env-file .env up -d
 
