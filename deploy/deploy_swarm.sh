@@ -96,12 +96,12 @@ do
 	docker-compose -f docker-compose.yml --env-file .env up -d
 
     echo "提取当前节点eth地址"
-    addr="$(docker-compose -f docker-compose.yml --env-file=.env logs bee-$i | grep 'using ethereum address'"
+    addr="$(docker-compose -f docker-compose.yml --env-file=.env logs bee-$i | grep 'using ethereum address')"
     while [ "$addr" == "" ]
     do
         echo "正在提取当前节点eth地址, 5s重试中..."
         sleep 5
-        addr="$(docker-compose -f docker-compose.yml --env-file=.env logs bee-$i | grep 'using ethereum address'"
+        addr="$(docker-compose -f docker-compose.yml --env-file=.env logs bee-$i | grep 'using ethereum address')"
     done
     echo "eth地址提取完毕 : $addr, 导入节点统一地址文件 ../addr.log"
     echo $addr >> ../addr.log
