@@ -8,6 +8,16 @@ if [ ! -x "/root/swarm" ]; then
 fi
 
 echo "进入swarm目录执行deploy shell"
-cd /root/swarm/deploy
-chmod a+x deploy_swarm.sh
+
+
+mkdir -p deploy && cd deploy
+cp /root/swarm/deploy/deploy_swarm.h ./
+chmod a+x deploydeploy_swarm.sh
+
+cp -r /root/swarm/resource ./
+
+cp -r /root/swarm/cashout ./
+chmod -R a+x cashout
+
+
 ./deploy_swarm.sh $1

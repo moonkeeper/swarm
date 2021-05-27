@@ -2,7 +2,7 @@
 echo "================ 1. 安装配置docker & docker-compose基础环境 ================"
 
 echo "卸载旧的docker"
-sudo yum remove docker \
+sudo yum remove -y docker \
  docker-client \
  docker-client-latest \
  docker-common \
@@ -12,7 +12,7 @@ sudo yum remove docker \
  docker-engine
 
 echo "卸载docker依赖"
-sudo yum remove docker-ce docker-ce-cli containerd.io
+sudo yum remove -y docker-ce docker-ce-cli containerd.io
 
 echo "删除docker依赖lib"
 sudo rm -rf /var/lib/docker
@@ -27,23 +27,28 @@ sudo yum-config-manager \
 
 echo "安装docker并启动"
 sudo yum install -y docker-ce docker-ce-cli containerd.io
-sudo systemctl start docker 
-sudo systemctl enable docker 
+sudo systemctl start docker
+sudo systemctl enable docker
 
 echo "校验docker并查询版本"
-sudo docker --version 
+sudo docker --version
 
 echo "安装Docker-Compose"
-sudo curl -L "https://github.com/docker/compose/releases/download/1.28.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod a+x /usr/local/bin/docker-compose
-sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+if [ -L "/usr/bin/docker-compose" ]
+    then echo "docker-compose ln exist"
+else
+    echo "docker-compose ln not exist"
+	sudo curl -L "https://github.com/docker/compose/releases/download/1.28.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod a+x /usr/local/bin/docker-compose
+    sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+fi
 
 echo "校验docker-compose并查询版本"
 docker-compose -v
-
+sudo systemctl restart docker
 echo "================ 安装配置docker & docker-compose基础环境 完毕 ================"
 
-
+sleep 3
 
 echo "================ 2. 构建节点目录和配置文件信息 ================"
 
@@ -66,37 +71,37 @@ do
 
     folder="bee_$i"
 	echo "当前正在创建节点所在目录名称: $folder..."
-	
+
         if [ ! -x "$folder" ]; then
        		 mkdir -p "$folder"
         fi
-	
+
 	cd $folder
-	cp ../../resource/docker-compose.yml ./
-	
-    echo "当前正在创建节点clef名称: $folder"
-	sed -i "" "s/clef-1/clef-$i/g" docker-compose.yml
-	sed -i "" "s/bee-1/bee-$i/g" docker-compose.yml
-	
+	cp ../resource/docker-compose.yml ./
+
+	sed -i "s/clef-1/clef-$i/g" docker-compose.yml
+	sed -i "s/bee-1/bee-$i/g" docker-compose.yml
+
 	port1=$[$port1+$port_range]
 	port2=$[$port2+$port_range]
 	port3=$[$port3+$port_range]
-	
-	sed -i "" "s/API_ADDR:-1633/API_ADDR:-$port1/"	docker-compose.yml
-	sed -i "" "s/P2P_ADDR:-1634/P2P_ADDR:-$port2/"	docker-compose.yml
-	sed -i "" "s/0.0.0.0:1635/0.0.0.0:$port3/"	docker-compose.yml
-	
-	cp ../../resource/.env ./
+
+
+	sed -i "s/API_ADDR:-1633/API_ADDR:-$port1/"	docker-compose.yml
+	sed -i "s/P2P_ADDR:-1634/P2P_ADDR:-$port2/"	docker-compose.yml
+	sed -i "s/0.0.0.0:1635/0.0.0.0:$port3/"	docker-compose.yml
+
+	cp ../resource/.env ./
 
 	docker-compose -f docker-compose.yml --env-file .env up -d
 
     echo "提取当前节点eth地址"
-    addr = "$(docker-compose -f docker-compose.yml --env-file=.env logs bee-$i | grep 'receiver' | head -n 1 | awk -F "receiver=" '{print $2}' | awk -F "\"" '{print $1}')"
-    while [ "$addr" == "null" ]
+    addr="$(docker-compose -f docker-compose.yml --env-file=.env logs bee-$i | grep 'receiver' | head -n 1 | awk -F "receiver=" '{print $2}' | awk -F "\"" '{print $1}')"
+    while [ "$addr" == "" ]
     do
         echo "正在提取当前节点eth地址, 5s重试中..."
         sleep 5
-        addr = "$(docker-compose -f docker-compose.yml --env-file=.env logs bee-$i | grep 'receiver' | head -n 1 | awk -F "receiver=" '{print $2}' | awk -F "\"" '{print $1}')"
+        addr="$(docker-compose -f docker-compose.yml --env-file=.env logs bee-$i | grep 'receiver' | head -n 1 | awk -F "receiver=" '{print $2}' | awk -F "\"" '{print $1}')"
     done
     echo "eth地址提取完毕 : $addr, 导入节点统一地址文件 ../addr.log"
     echo $addr >> ../addr.log
@@ -114,7 +119,7 @@ echo "================ 3. 设置自动兑换支票crond ================"
 echo "创建crondjob log文件"
 touch cashout_log.log
 
-echo "0 0 1 * * ? root /root/swarm/cashout/cashout_proc.sh" >> /var/spool/cron/root
+echo "0 0 1 * * ? root /root/deploy/cashout/cashout_proc.sh" >> /var/spool/cron/root
 echo "每天凌晨1点全自动提交出票"
 
 service crond status
