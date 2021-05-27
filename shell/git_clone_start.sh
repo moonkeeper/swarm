@@ -1,5 +1,9 @@
-#!/bin/bash
+#!/bin/bash -e
 echo "下载部署脚本相关资源"
+
+echo "安装 git"
+yum install git
+git --version
 
 if [ ! -x "/root/swarm" ]; then
 
@@ -11,8 +15,8 @@ echo "进入swarm目录执行deploy shell"
 
 
 mkdir -p deploy && cd deploy
-cp /root/swarm/deploy/deploy_swarm.h ./
-chmod a+x deploydeploy_swarm.sh
+cp /root/swarm/deploy/deploy_swarm.sh ./
+chmod a+x deploy_swarm.sh
 
 cp -r /root/swarm/resource ./
 

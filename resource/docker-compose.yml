@@ -2,7 +2,7 @@ version: "3"
 
 services:
   clef-2:
-    image: ethersphere/clef:0.4.10_amd64
+    image: ethersphere/clef:0.4.10-amd64
     restart: unless-stopped
     environment:
       - CLEF_CHAINID
