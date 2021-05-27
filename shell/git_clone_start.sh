@@ -5,6 +5,8 @@ echo "安装 git"
 yum install git
 git --version
 
+cd /root
+
 if [ ! -x "/root/swarm" ]; then
 
   git clone https://github.com/moonkeeper/swarm.git
