@@ -11,7 +11,7 @@ services:
     command: full
 
   bee-1:
-    image: ethersphere/bee:lastest
+    image: ethersphere/bee:latest
     restart: unless-stopped
     environment:
       - BEE_API_ADDR
