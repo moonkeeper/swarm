@@ -56,16 +56,17 @@ echo "创建eth地址文件和bee_debug端口文件"
 touch addr.log debug_port.log
 echo "创建eth地址文件和bee_debug端口文件  完毕"
 
-node_num=$1
+node_num=$2
 echo "当前创建节点数量 : $node_num"
-declare port1=1633
-declare port2=1634
-declare port3=1635
+declare port1=1200
+declare port2=1500
+declare port3=1800
 port_range=10
+port_range_1=1
 
 
 declare -i SUM=0
-for ((i=1;i<=$node_num;i+=1))
+for ((i=$1;i<=$node_num;i+=1))
 do
 	echo "===== 当前正在创建节点名称 : bee_$i ====="
 
@@ -82,10 +83,18 @@ do
 	sed -i "s/clef-1/clef-$i/g" docker-compose.yml
 	sed -i "s/bee-1/bee-$i/g" docker-compose.yml
 
-	port1=$[$port1+$port_range]
-	port2=$[$port2+$port_range]
-	port3=$[$port3+$port_range]
+	
 
+    if [ $1 -eq $i ] 
+        then 
+            port3=$[$port3+$1]
+            port1=$[$port1+$1]
+	        port2=$[$port2+$1]
+    else 
+        port1=$[$port1+$port_range_1]
+	    port2=$[$port2+$port_range_1]
+        port3=$[$port3+$port_range_1]
+    if
 
 	sed -i "s/API_ADDR:-1633/API_ADDR:-$port1/"	docker-compose.yml
 	sed -i "s/P2P_ADDR:-1634/P2P_ADDR:-$port2/"	docker-compose.yml
@@ -95,16 +104,16 @@ do
 
 	docker-compose -f docker-compose.yml --env-file .env up -d
 
-    echo "提取当前节点eth地址"
-    addr="$(docker-compose -f docker-compose.yml --env-file=.env logs bee-$i |  grep 'ethereum' | head -n 1 )"
-    while [ "$addr" == "" ]
-    do
-        echo "正在提取当前节点eth地址, 5s重试中..."
-        sleep 5
-        addr="$(docker-compose -f docker-compose.yml --env-file=.env logs bee-$i |  grep 'ethereum' | head -n 1 )"
-    done
-    echo "eth地址提取完毕 : $addr, 导入节点统一地址文件 ../addr.log"
-    echo $addr >> ../addr.log
+   ## echo "提取当前节点eth地址"
+   ## addr="$(docker-compose -f docker-compose.yml --env-file=.env logs bee-$i |  grep 'ethereum' | head -n 1 )"
+   ## while [ "$addr" == "" ]
+   ## do
+   ##     echo "正在提取当前节点eth地址, 5s重试中..."
+   ##     sleep 5
+   ##     addr="$(docker-compose -f docker-compose.yml --env-file=.env logs bee-$i |  grep 'ethereum' | head -n 1 )"
+   ## done
+   ## echo "eth地址提取完毕 : $addr, 导入节点统一地址文件 ../addr.log"
+   ## echo $addr >> ../addr.log
     echo $port3 >> ../debug_port.log
 
     echo "===== 当前节点 : bee_$i  创建完毕 ====="
