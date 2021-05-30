@@ -26,4 +26,4 @@ cp -r /root/swarm/cashout ./
 chmod -R a+x cashout
 
 
-./deploy_swarm.sh $1
+./deploy_swarm.sh $1 $2

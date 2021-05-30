@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  clef-1:
+    image: ethersphere/clef:0.4.12
+    restart: unless-stopped
+    environment:
+      - CLEF_CHAINID
+    volumes:
+      - clef-1:/app/data
+    command: full
+    networks:
+         extnetwork:
+            ipv4_address: 172.21.0.2
+
+networks:
+   extnetwork:
+      ipam:
+         config:
+         - subnet: 172.21.0.0/24
+           gateway: 172.21.0.1
+
+volumes:
+  clef-1:
