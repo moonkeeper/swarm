@@ -1,6 +1,25 @@
 # swarm
 for deploy swarm/eth cluster by docker-compose
 
+
+# dependency && requirement
+1. centos7+
+2. git 
+
+```
+yum install -y git
+git --version
+```
+
+# install && deploy
+
+```
+cd /root
+git clone https://github.com/moonkeeper/swarm.git  
+
+```
+
+
 # 部署deploy脚本 
 scp git_clone_start.sh root@xxxx.xxxx.xxx.xx:/root/git_clone_start.sh  \
 chmod a+x git_clone_start.sh  \
