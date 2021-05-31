@@ -115,7 +115,7 @@ do
     echo "================ 当前节点 : bee_$i  创建完毕 ================"
 
     echo "================ 校验当前bee节点支票本是否创建完毕 ================"
-
+    sleep 10
     CHEQUE_INFO=$(curl -s http://localhost:$port3/chequebook/address | grep chequebookAddress)
     while [ "$CHEQUE_INFO" == "" ]
     do
