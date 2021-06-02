@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 node_num=$2
 echo "当前创建节点数量 : $node_num"

@@ -67,22 +67,22 @@ esac
 
 echo "Local disks are provisioned succesfully"
 
-N_ONE=${#NVME_LIST[0]}
+N_ONE=${NVME_LIST[0]}
 UUID=$(blkid -s UUID -o value "$N_ONE")
 
 echo "=============== 挂载磁盘uuid  $UUID  =================="
 echo "=============== 重置docker默认存储路径  $UUID  =================="
 
-if [ "$UUID" -ne "" ] 
+if [ -z "$UUID" ] 
     then  
         if [ ! -f /etc/docker/daemon.json ]
             then 
-                cp resource/daemon.json /etc/docker/daemon.json
+                cp daemon.json /etc/docker/daemon.json
 
                 old=\\/www\\/docker
                 new=\\/mnt\\/disks\\/$UUID
                 sed -i "s/$old/$new/g" /etc/docker/daemon.json
-        if
+        fi
         
 else 
     echo "挂载磁盘uuid 不存在"
