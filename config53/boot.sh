@@ -10,7 +10,7 @@ echo "进入swarm目录执行deploy shell"
 
 
 mkdir -p /root/deploy
-cp /root/swarm/config53/deploy.sh /root/deploy/deploy.sh
+cp /root/swarm/config53/deploy_step_part.sh /root/deploy/deploy.sh
 chmod a+x /root/deploy/deploy.sh
 
 mkdir -p /root/deploy/resource 
@@ -20,4 +20,4 @@ cp -r /root/swarm/cashout /root/deploy/
 chmod -R a+x /root/swarm/cashout
 
 cd /root/deploy
-./deploy.sh $1 $2
+./deploy.sh $1 $2 $3

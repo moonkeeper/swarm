@@ -1,4 +1,5 @@
 #!/bin/bash
+touch addr.log
 
 node_num=$2
 echo "当前创建节点数量 : $node_num"
@@ -33,7 +34,7 @@ do
             port3=$[$port3+$1]
             port1=$[$port1+$1]
 	        port2=$[$port2+$1]
-    else
+    else 
         port1=$[$port1+$port_range_1]
 	    port2=$[$port2+$port_range_1]
         port3=$[$port3+$port_range_1]
@@ -46,11 +47,25 @@ do
 	docker-compose -f bee_config.yml --env-file .env up -d
 
     echo "================ 当前节点 : bee_$i  创建完毕 ================"
+    
+
+    if [ $1 -eq $i ] then 
+        echo "获取eth地址"
+        sleep 5
+        ETH_ADDR = $(docker-compose -f bee_config.yml --env-file .env logs -f bee-$i | grep ethereum | head -n 1)
+        while [ -z "$ETH_ADDR" ]
+        do
+            echo "当前未能获取eth地址, 等待10s后再次确认..."
+            sleep 10
+            ETH_ADDR = $(docker-compose -f bee_config.yml --env-file .env logs -f bee-$i | grep ethereum | head -n 1)
+        done
+        echo $ETH_ADDR >> ../addr.log
+    fi
 
     echo "================ 校验当前bee节点支票本是否创建完毕 ================"
 	sleep 10
     CHEQUE_INFO=$(curl -s http://localhost:$port3/chequebook/address | grep chequebookAddress)
-    while [ "$CHEQUE_INFO" == "" ]
+    while [ -z "$CHEQUE_INFO" ]
     do
          echo "当前节点还未生成支票本, 等待10s后再次确认..."
          sleep 10
