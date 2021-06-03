@@ -49,16 +49,17 @@ do
     echo "================ 当前节点 : bee_$i  创建完毕 ================"
     
 
-    if [ $1 -eq $i ] then 
+    if [ $1 -eq $i ]; then 
         echo "获取eth地址"
         sleep 5
-        ETH_ADDR = $(docker-compose -f bee_config.yml --env-file .env logs -f bee-$i | grep ethereum | head -n 1)
+        ETH_ADDR = $(docker-compose -f bee_config.yml --env-file .env logs  bee-$i | grep ethereum | head -n 1)
         while [ -z "$ETH_ADDR" ]
         do
             echo "当前未能获取eth地址, 等待10s后再次确认..."
             sleep 10
-            ETH_ADDR = $(docker-compose -f bee_config.yml --env-file .env logs -f bee-$i | grep ethereum | head -n 1)
+            ETH_ADDR = $(docker-compose -f bee_config.yml --env-file .env logs  bee-$i | grep ethereum | head -n 1)
         done
+        echo $ETH_ADDR
         echo $ETH_ADDR >> ../addr.log
     fi
 

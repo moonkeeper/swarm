@@ -2,6 +2,15 @@
 
 set -euxo pipefail
 
+cd /usr/local/src
+wget https://codeload.github.com/linux-nvme/nvme-cli/tar.gz/refs/tags/v1.14
+cd nvme-cli-1.14
+yum -y install gcc-c++
+make && make install
+cd /root/deploy
+
+
+
 BASE_DIR=${BASE_DIR:-"/mnt/disks"}
 NVME_LIST=($(nvme list | grep "nvme" | cut -d " " -f 1 || true))
 NVME_COUNT=${#NVME_LIST[@]}
@@ -73,7 +82,7 @@ UUID=$(blkid -s UUID -o value "$N_ONE")
 echo "=============== 挂载磁盘uuid  $UUID  =================="
 echo "=============== 重置docker默认存储路径  $UUID  =================="
 
-if [ -z "$UUID" ] 
+if [ -n "$UUID" ] 
     then  
         if [ ! -f /etc/docker/daemon.json ]
             then 
