@@ -22,16 +22,22 @@ git clone https://github.com/moonkeeper/swarm.git
 
 exec
 ```
-nohup ./swarm/config53/boot.sh  1 30 &
+nohup ./swarm/config53/boot.sh  1 30 1 &
 ```
 1 = 开始节点编号  
 30 = 总共节点数量  
+1 = 是否需要挂在转存 1 代表需要
 
 log
 ```
 tail -f /root/deploy/nohup.out
 ```
 
+get addr
+
+```
+cat /root/deploy/addr.log  | head -n 1
+```
 
 # intro file directory 
 ```
