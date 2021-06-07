@@ -22,11 +22,11 @@ git clone https://github.com/moonkeeper/swarm.git
 
 exec
 ```
-nohup ./swarm/config53/boot.sh  1 30 1 &
+nohup ./swarm/config53/boot.sh  param1 param2 param3 &
 ```
-1 = 开始节点编号  
-30 = 总共节点数量  
-1 = 是否需要挂在转存 1 代表需要
+param1 = 开始节点编号  
+param2 = 总共节点数量  
+param3 = u2/m2/d2    u2=u2磁盘/m2=m2磁盘/d2=默认路径
 
 log
 ```
