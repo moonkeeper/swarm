@@ -31,5 +31,8 @@ cp /root/swarm/config62/clef_config.yml /root/swarm/config62/bee_config.yml /roo
 cp -r /root/swarm/cashout /root/deploy/
 chmod -R a+x /root/swarm/cashout
 
+chmod a+x /root/swarm/config62/res/nvme-cli-1.14.tar
+cp /root/swarm/config62/res/nvme-cli-1.14.tar /usr/local/src
+
 cd /root/deploy
 ./deploy.sh $1 $2 $3

@@ -4,8 +4,7 @@ set -euxo pipefail
 
 cd /usr/local/src
 yum install -y wget
-wget https://codeload.github.com/linux-nvme/nvme-cli/tar.gz/refs/tags/v1.14
-tar zxvf v1.14
+tar zxvf nvme-cli-1.14.tar
 cd nvme-cli-1.14
 yum -y install gcc-c++
 make && make install
