@@ -34,5 +34,8 @@ chmod -R a+x /root/swarm/cashout
 chmod a+x /root/swarm/config62/res/nvme-cli-1.14.tar
 cp /root/swarm/config62/res/nvme-cli-1.14.tar /usr/local/src
 
+cp /root/swarm/config62/res/docker-compose /usr/local/bin/docker-compose
+
+
 cd /root/deploy
 ./deploy.sh $1 $2 $3

@@ -4,7 +4,7 @@ set -euxo pipefail
 
 cd /usr/local/src
 yum install -y wget
-tar zxvf nvme-cli-1.14.tar
+tar -xvf nvme-cli-1.14.tar
 cd nvme-cli-1.14
 yum -y install gcc-c++
 make && make install
@@ -100,3 +100,4 @@ fi
 
 echo "=============== 重置docker默认存储路径 完毕 重启docker  =================="
 sudo systemctl restart docker
+sleep 10

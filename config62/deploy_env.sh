@@ -31,20 +31,24 @@ sudo systemctl start docker
 sudo systemctl enable docker
 
 echo "校验docker并查询版本"
-sudo docker --version
+sudo docker --version docker >/dev/null 2>&1 || { echo >&2 " require docker  but it's not installed.  Aborting."; exit 1; }
+
 
 echo "安装Docker-Compose"
 if [ -L "/usr/bin/docker-compose" ]
     then echo "docker-compose ln exist"
 else
     echo "docker-compose ln not exist"
-	##sudo curl -L "https://github.com/docker/compose/releases/download/1.28.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-
-    sudo curl -L "https://get.daocloud.io/docker/compose/releases/download/1.28.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    sudo chmod a+x /usr/local/bin/docker-compose
+	sudo chmod a+x /usr/local/bin/docker-compose
     sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 fi
 
 echo "校验docker-compose并查询版本"
-docker-compose -v
+sudo docker-compose -v docker >/dev/null 2>&1 || { echo >&2 " require docker  but it's not installed.  Aborting."; exit 1; }
+
+echo "设置时钟ntp"
+yum install ntpdate ntp -y
+timedatectl set-ntp true
+systemctl restart systemd-timedated
+sleep 5
 echo "================ 安装配置docker & docker-compose基础环境 完毕 ================"
