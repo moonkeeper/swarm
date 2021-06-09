@@ -1,6 +1,12 @@
 #!/bin/bash -e
 echo "================ 1. 安装配置docker & docker-compose基础环境 ================"
 
+echo "设置时钟ntp"
+yum install ntpdate ntp -y
+timedatectl set-ntp true
+systemctl restart systemd-timedated
+sleep 5
+
 echo "卸载旧的docker"
 sudo yum remove -y docker \
  docker-client \
@@ -46,9 +52,5 @@ fi
 echo "校验docker-compose并查询版本"
 sudo docker-compose -v docker >/dev/null 2>&1 || { echo >&2 " require docker  but it's not installed.  Aborting."; exit 1; }
 
-echo "设置时钟ntp"
-yum install ntpdate ntp -y
-timedatectl set-ntp true
-systemctl restart systemd-timedated
-sleep 5
+
 echo "================ 安装配置docker & docker-compose基础环境 完毕 ================"
